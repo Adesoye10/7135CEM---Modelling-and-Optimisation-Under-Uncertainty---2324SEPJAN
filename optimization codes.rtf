@@ -1,0 +1,1380 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2706
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 Times-Bold;\f1\froman\fcharset0 TimesNewRomanPSMT;\f2\froman\fcharset0 TimesNewRomanPS-BoldMT;
+\f3\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red148\green0\blue242;\red8\green0\blue255;
+\red15\green112\blue16;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c65490\c3529\c96078;\cssrgb\c5490\c0\c100000;
+\cssrgb\c0\c50196\c7451;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh18000\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf2 \expnd0\expndtw0\kerning0
+\'a0# function 1
+\f1\b0\fs32 \
+\pard\pardeftab720\sl560\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 Genetic Algorithm:
+\f1\b0\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Genetic Algorithm Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'ga'\cf2 , \cf3 'PlotFcn'\cf2 , \{@gaplotbestf, @gaplotdistance\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ga_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % ga for CEC function 1, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [ga_x, ga_val, ga_exit_flag, ga_output] = ga(@(x) benchmark_func(x, 1), 2, [], [], [], [], [], [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ga_main_val(i) = ga_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ga_main_exit_flag(i) = ga_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(ga_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ga_main_op(i) = min(ga_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ga_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% GA 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ga_val_max = max(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_min = min(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_mean = mean(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_std = std(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\cf4 end
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f0\b\fs26\fsmilli13333 \'a0# function 1\
+
+\f1\b0\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 Particle Swarm Optimization:
+\f3\b0\fs26\fsmilli13333 \
+clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Particle Swarm Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'particleswarm'\cf2 , \cf3 'PlotFcn'\cf2 , \{@pswplotbestf\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 pso_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Particle Swarm Optimization for CEC function 1, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [pso_x, pso_val, pso_exit_flag, pso_output] = particleswarm(@(x) benchmark_func(x, 1), 2, [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename_pso(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 pso_main_val(i) = pso_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 pso_main_exit_flag(i) = pso_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(pso_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 pso_main_op(i) = min(pso_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 pso_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Particle Swarm Optimization 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 pso_val_max = max(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_min = min(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_mean = mean(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_std = std(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\cf4 \
+end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\sl746\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 \'a0
+\f0\fs26\fsmilli13333 \'a0# function 1
+\f1\b0\fs32 \
+
+\f2\b\fs37\fsmilli18667 Pattern Search Opmtimisation:
+\f1\b0\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Pattern Search Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'patternsearch'\cf2 , \cf3 'PlotFcn'\cf2 , \{@psplotbestf, @psplotbestx\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ps_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Pattern Search for CEC function 1, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [ps_x, ps_val, ps_exit_flag, ps_output] = patternsearch(@(x) benchmark_func(x, 1), rand(1, 2), [], [], [], [], [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename_ps(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Display information about the optimization process
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 disp([\cf3 'Iteration '\cf2 , num2str(i), \cf3 ': Exit Flag - '\cf2 , num2str(ps_exit_flag)]);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 disp([\cf3 '\'a0\'a0 Termination Reason: '\cf2 , ps_output.message]);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ps_main_val(i) = ps_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ps_main_exit_flag(i) = ps_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(ps_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ps_main_op(i) = min(ps_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ps_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Pattern Search 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ps_val_max = max(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_min = min(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_mean = mean(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_std = std(ps_main_val);
+\f1\fs32 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf2 \'a0# function 2
+\f1\b0\fs32 \
+\pard\pardeftab720\sl560\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 Genetic Algorithm:
+\f1\b0\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Genetic Algorithm Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'ga'\cf2 , \cf3 'PlotFcn'\cf2 , \{@gaplotbestf, @gaplotdistance\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ga_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % ga for CEC function 2, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [ga_x, ga_val, ga_exit_flag, ga_output] = ga(@(x) benchmark_func(x, 2), 2, [], [], [], [], [], [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ga_main_val(i) = ga_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ga_main_exit_flag(i) = ga_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(ga_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ga_main_op(i) = min(ga_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ga_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% GA 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ga_val_max = max(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_min = min(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_mean = mean(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_std = std(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\cf4 end
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f0\b\fs26\fsmilli13333 \'a0# function 2\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b0\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 Particle Swarm Optimization:
+\f3\b0\fs26\fsmilli13333 \
+clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Particle Swarm Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'particleswarm'\cf2 , \cf3 'PlotFcn'\cf2 , \{@pswplotbestf\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 pso_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Particle Swarm Optimization for CEC function 2, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [pso_x, pso_val, pso_exit_flag, pso_output] = particleswarm(@(x) benchmark_func(x, 2), 2, [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename_pso(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 pso_main_val(i) = pso_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 pso_main_exit_flag(i) = pso_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(pso_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 pso_main_op(i) = min(pso_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 pso_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Particle Swarm Optimization 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 pso_val_max = max(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_min = min(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_mean = mean(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_std = std(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\cf4 \
+end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\sl640\partightenfactor0
+
+\f2\b \cf2 \'a0
+\f0\fs26\fsmilli13333 \'a0# function 2
+\f1\b0\fs32 \
+\pard\pardeftab720\sl746\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 Pattern Search Opmtimisation:
+\f1\b0\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Pattern Search Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'patternsearch'\cf2 , \cf3 'PlotFcn'\cf2 , \{@psplotbestf, @psplotbestx\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ps_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Pattern Search for CEC function 2, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [ps_x, ps_val, ps_exit_flag, ps_output] = patternsearch(@(x) benchmark_func(x, 2), rand(1, 2), [], [], [], [], [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename_ps(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Display information about the optimization process
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 disp([\cf3 'Iteration '\cf2 , num2str(i), \cf3 ': Exit Flag - '\cf2 , num2str(ps_exit_flag)]);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 disp([\cf3 '\'a0\'a0 Termination Reason: '\cf2 , ps_output.message]);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ps_main_val(i) = ps_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ps_main_exit_flag(i) = ps_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(ps_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ps_main_op(i) = min(ps_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ps_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Pattern Search 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ps_val_max = max(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_min = min(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_mean = mean(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_std = std(ps_main_val);\
+\
+\pard\pardeftab720\partightenfactor0
+\cf4 end\cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 \'a0\
+\
+# function 3
+\f1\b0\fs32 \
+\pard\pardeftab720\sl560\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 Genetic Algorithm:
+\f1\b0\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0# function 1
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Genetic Algorithm Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'ga'\cf2 , \cf3 'PlotFcn'\cf2 , \{@gaplotbestf, @gaplotdistance\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ga_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % ga for CEC function 3, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [ga_x, ga_val, ga_exit_flag, ga_output] = ga(@(x) benchmark_func(x, 3), 2, [], [], [], [], [], [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ga_main_val(i) = ga_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ga_main_exit_flag(i) = ga_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(ga_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ga_main_op(i) = min(ga_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ga_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% GA 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ga_val_max = max(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_min = min(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_mean = mean(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ga_val_std = std(ga_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\cf4 end
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f0\b\fs26\fsmilli13333 \'a0# function 3\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b0\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 Particle Swarm Optimization:
+\f3\b0\fs26\fsmilli13333 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Particle Swarm Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'particleswarm'\cf2 , \cf3 'PlotFcn'\cf2 , \{@pswplotbestf\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 pso_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Particle Swarm Optimization for CEC function 3, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [pso_x, pso_val, pso_exit_flag, pso_output] = particleswarm(@(x) benchmark_func(x, 3), 2, [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename_pso(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 pso_main_val(i) = pso_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 pso_main_exit_flag(i) = pso_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(pso_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 pso_main_op(i) = min(pso_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 pso_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Particle Swarm Optimization 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 pso_val_max = max(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_min = min(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_mean = mean(pso_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 pso_val_std = std(pso_main_val);\
+\pard\pardeftab720\partightenfactor0
+\cf4 \
+end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\sl640\partightenfactor0
+
+\f2\b \cf2 \'a0
+\f1\b0 \
+
+\f2\b \'a0
+\fs37\fsmilli18667 \'a0
+\f0\fs26\fsmilli13333 \'a0# function 3
+\f1\b0\fs32 \
+\pard\pardeftab720\sl746\partightenfactor0
+
+\f2\b\fs37\fsmilli18667 \cf2 Pattern Search Opmtimisation:
+\f1\b0\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 clc, clear, close \cf3 all
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 rng \cf3 default
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 global \cf2 initial_flag
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Pattern Search Optimization 15 iterations
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 options = optimoptions(\cf3 'patternsearch'\cf2 , \cf3 'PlotFcn'\cf2 , \{@psplotbestf, @psplotbestx\});
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 % Initialize variables
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ps_main_val = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_main_exit_flag = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_main_op = zeros(1, 15);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 for \cf2 i = 1:15
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0\'a0\'a0 initial_flag = 0;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Pattern Search for CEC function 1, D=2
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 [ps_x, ps_val, ps_exit_flag, ps_output] = patternsearch(@(x) benchmark_func(x, 3), rand(1, 2), [], [], [], [], [], [], options);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % save visualizations to file
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 fname = sprintf(\cf3 'filename_ps(%d).fig'\cf2 , i);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 savefig(fname)
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Display information about the optimization process
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 disp([\cf3 'Iteration '\cf2 , num2str(i), \cf3 ': Exit Flag - '\cf2 , num2str(ps_exit_flag)]);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 disp([\cf3 '\'a0\'a0 Termination Reason: '\cf2 , ps_output.message]);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Store results in arrays
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ps_main_val(i) = ps_val;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 ps_main_exit_flag(i) = ps_exit_flag;
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf5 % Check if 'fval' field exists in the output structure
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 if \cf2 isfield(ps_output, \cf3 'fval'\cf2 )
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ps_main_op(i) = min(ps_output.fval);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 else
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 \cf5 % If 'fval' doesn't exist, you may need to adjust accordingly
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ps_main_op(i) = NaN;\'a0 \cf5 % or any appropriate default value
+\f1\fs32 \cf2 \
+
+\f3\fs26\fsmilli13333 \'a0\'a0\'a0 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf4 end
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 \'a0
+\f1\fs32 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf5 %% Pattern Search 15 iteration measures
+\f1\fs32 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26\fsmilli13333 \cf2 ps_val_max = max(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_min = min(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_mean = mean(ps_main_val);
+\f1\fs32 \
+
+\f3\fs26\fsmilli13333 ps_val_std = std(ps_main_val);\
+\
+\pard\pardeftab720\partightenfactor0
+\cf4 end\cf2 \
+\
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs32 \cf2 \
+}
